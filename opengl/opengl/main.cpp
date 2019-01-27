@@ -22,7 +22,7 @@
 ////////////////////////////Globals////////////////////////////
 static const int windowWidth = 1280;
 static const int windowHeight = 720;
-static const int aspectRatio = windowWidth/windowHeight;
+ float aspectRatio = (float)windowWidth/(float)windowHeight;
 static const int sizeFactor = 2 * aspectRatio;
 ////////////////////////////Globals////////////////////////////
 
@@ -47,15 +47,13 @@ void endFlush(){
 }
 
 //creates/allocates a 2D array
-float** createArray(int r, int n)
-{
-    float** a = new float*[r]; // Rows
+float** createArray(int r, int c){
     
-    for (int i = 0; i < r; i++)
-    {
-        a[i] = new float[n]; // Columns
+    float** array = new float*[r]; // Rows
+    for (int i = 0; i < r; i++){
+        array[i] = new float[c]; // Columns
     }
-    return a;
+    return array;
 }
 
 float getColor()
@@ -63,7 +61,6 @@ float getColor()
     return RandomFloat(0.0, 1.0);
 }
 ////////////////////////////Helpers////////////////////////////
-
 
 void Firework(float centerX,float centerY, int sizeFactor, float red, float green, float blue){
     float outerX = RandomFloat(centerX-sizeFactor, centerX+sizeFactor);
@@ -73,7 +70,6 @@ void Firework(float centerX,float centerY, int sizeFactor, float red, float gree
         outerX = centerX + 1;
         outerY = centerY + 1;
     }
-    
     glColor3f(red,green,blue);
     glBegin(GL_LINES);
     glVertex3f(centerX, centerY, 0.0);
@@ -98,7 +94,6 @@ void display(){
         
         float X = fireworkCenters[i][0];
         float Y = fireworkCenters[i][1];
-        
         float red = getColor();
         float green = getColor();
         float blue  = getColor();
@@ -115,16 +110,13 @@ int main(int argc, char** argv) {
     printf("hello world\n");
     glutInit(&argc, argv);
     glutInitDisplayMode ( GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
-    
     glutInitWindowPosition(100,100);
-    glutInitWindowSize(800,800); // set window size
+    glutInitWindowSize(windowWidth,windowHeight); // set window size
     glutCreateWindow ("square");
-    
     glClearColor(0.0, 0.0, 0.0, 0.0);         // black background
-    glMatrixMode(GL_PROJECTION);              // setup viewing projection
-    glLoadIdentity();                           // start with identity matrix
-    glOrtho(0.0, 10.0, 0.0, 10.0, -1.0, 1.0);   // setup a 10x10x2 viewing world
-    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0.0, 10.0, 0.0, 10.0, -1.0, 1.0);
     glutDisplayFunc(display);
     glutMainLoop();
     
