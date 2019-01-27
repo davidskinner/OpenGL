@@ -19,6 +19,14 @@
 
 #include <GLUT/glut.h>
 
+////////////////////////////Globals////////////////////////////
+static const int windowWidth = 1280;
+static const int windowHeight = 720;
+static const int aspectRatio = windowWidth/windowHeight;
+static const int sizeFactor = 2 * aspectRatio;
+////////////////////////////Globals////////////////////////////
+
+////////////////////////////Helpers////////////////////////////
 //gets a random floating point number in a range
 float RandomFloat(float a, float b) {
     float random = ((float) rand()) / (float) RAND_MAX;
@@ -27,9 +35,9 @@ float RandomFloat(float a, float b) {
     return a + r;
 }
 
+//gets a random integer in a range
 int RandomInt(int min, int max){
     return rand() % max + min;
-
 }
 
 //more concise
@@ -38,23 +46,7 @@ void endFlush(){
     glFlush();
 }
 
-void Firework(float centerX,float centerY, int sizeFactor, float red, float green, float blue){
-    float outerX = RandomFloat(centerX-sizeFactor, centerX+sizeFactor);
-    float outerY = RandomFloat(centerY-sizeFactor, centerY+sizeFactor);
-    
-    if(sqrt(abs(pow(centerX - (double)outerX, 2)) + abs(pow(centerY - (double)outerY,2) )) >= 2)
-    {
-        outerX = centerX + 1;
-        outerY = centerY + 1;
-    }
-    
-    glColor3f(red,green,blue);
-    glBegin(GL_LINES);
-    glVertex3f(centerX, centerY, 0.0);
-    glVertex3f(outerX, outerY, 0.0);
-    endFlush();
-}
-
+//creates/allocates a 2D array
 float** createArray(int r, int n)
 {
     float** a = new float*[r]; // Rows
@@ -70,34 +62,55 @@ float getColor()
 {
     return RandomFloat(0.0, 1.0);
 }
+////////////////////////////Helpers////////////////////////////
+
+
+void Firework(float centerX,float centerY, int sizeFactor, float red, float green, float blue){
+    float outerX = RandomFloat(centerX-sizeFactor, centerX+sizeFactor);
+    float outerY = RandomFloat(centerY-sizeFactor, centerY+sizeFactor);
+    
+    if(sqrt(abs(pow(centerX - (double)outerX, 2)) + abs(pow(centerY - (double)outerY,2) )) >= 2){
+        outerX = centerX + 1;
+        outerY = centerY + 1;
+    }
+    
+    glColor3f(red,green,blue);
+    glBegin(GL_LINES);
+    glVertex3f(centerX, centerY, 0.0);
+    glVertex3f(outerX, outerY, 0.0);
+    endFlush();
+}
 
 void display(){
     //generate a random number of fireworks
-    int numberOfFireworks =RandomInt(2,7);
+    int numberOfFireworks =RandomInt(2,10);
     int xY = 2;
     float ** fireworkCenters = createArray(numberOfFireworks, xY);
-//
+    
     //generate values for fireworkCenters
     for (int i = 0; i < numberOfFireworks; i++) {
         for (int j = 0; j < xY ; j++) {
-            fireworkCenters[i][j] = RandomFloat(1.0, 10.0);
+            fireworkCenters[i][j] = RandomFloat(1.0, 9.0);
         }
     }
     
     for (int i = 0; i < numberOfFireworks; i++) {
+        
         float X = fireworkCenters[i][0];
         float Y = fireworkCenters[i][1];
+        
         float red = getColor();
         float green = getColor();
         float blue  = getColor();
         
     for (int j = 0; j < 100; j++) {
-        Firework(X, Y, 2,red,green,blue);
+        Firework(X, Y, sizeFactor,red,green,blue);
     }
     }
 }
 
 int main(int argc, char** argv) {
+    
     srand((unsigned int)time(NULL));
     printf("hello world\n");
     glutInit(&argc, argv);
