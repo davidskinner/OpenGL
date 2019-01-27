@@ -27,6 +27,11 @@ float RandomFloat(float a, float b) {
     return a + r;
 }
 
+int RandomInt(int min, int max){
+    return rand() % max + min;
+
+}
+
 //more concise
 void endFlush(){
     glEnd();
@@ -50,8 +55,6 @@ void Firework(float centerX,float centerY, int sizeFactor, float red, float gree
     endFlush();
 }
 
-
-
 float** createArray(int r, int n)
 {
     float** a = new float*[r]; // Rows
@@ -70,7 +73,7 @@ float getColor()
 
 void display(){
     //generate a random number of fireworks
-    int numberOfFireworks =10;
+    int numberOfFireworks =RandomInt(2,7);
     int xY = 2;
     float ** fireworkCenters = createArray(numberOfFireworks, xY);
 //
@@ -88,8 +91,6 @@ void display(){
         float green = getColor();
         float blue  = getColor();
         
-        
-        
     for (int j = 0; j < 100; j++) {
         Firework(X, Y, 2,red,green,blue);
     }
@@ -97,12 +98,13 @@ void display(){
 }
 
 int main(int argc, char** argv) {
+    srand((unsigned int)time(NULL));
     printf("hello world\n");
     glutInit(&argc, argv);
     glutInitDisplayMode ( GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     
     glutInitWindowPosition(100,100);
-    glutInitWindowSize(600,600); // set window size
+    glutInitWindowSize(800,800); // set window size
     glutCreateWindow ("square");
     
     glClearColor(0.0, 0.0, 0.0, 0.0);         // black background
