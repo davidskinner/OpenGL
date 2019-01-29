@@ -20,8 +20,8 @@
 #include <GLUT/glut.h>
 
 ////////////////////////////Globals////////////////////////////
-static const int windowWidth = 1280;
-static const int windowHeight = 720;
+static const int windowWidth = 800;
+static const int windowHeight = 800;
  float aspectRatio = (float)windowWidth/(float)windowHeight;
 static const int sizeFactor = 2 * aspectRatio;
 ////////////////////////////Globals////////////////////////////
@@ -71,6 +71,7 @@ void Firework(float centerX,float centerY, int sizeFactor, float red, float gree
         outerY = centerY + 1;
     }
     glColor3f(red,green,blue);
+//    glColor3f(RandomFloat(0.0,1.0), RandomFloat(0.0,1.0), RandomFloat(0.0,1.0));
     glBegin(GL_LINES);
     glVertex3f(centerX, centerY, 0.0);
     glVertex3f(outerX, outerY, 0.0);
@@ -78,9 +79,13 @@ void Firework(float centerX,float centerY, int sizeFactor, float red, float gree
 }
 
 void display(){
-    //generate a random number of fireworks
+    //choose a random number of fireworks to display
     int numberOfFireworks =RandomInt(2,10);
+    
+    //length of array that hold the X and Y Positions
     int xY = 2;
+    
+    //dynamic 2D array that hold variable amounts of
     float ** fireworkCenters = createArray(numberOfFireworks, xY);
     
     //generate values for fireworkCenters
@@ -92,12 +97,16 @@ void display(){
     
     for (int i = 0; i < numberOfFireworks; i++) {
         
+        //center X and Y to get passed to Firework()
         float X = fireworkCenters[i][0];
         float Y = fireworkCenters[i][1];
+        
+        //random  colors of fireworks
         float red = getColor();
         float green = getColor();
         float blue  = getColor();
         
+    //the number of lines in the firework
     for (int j = 0; j < 100; j++) {
         Firework(X, Y, sizeFactor,red,green,blue);
     }
